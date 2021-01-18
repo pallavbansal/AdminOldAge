@@ -1,17 +1,12 @@
+<?php include 'header.php';?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title> Regitration Page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Font Awesome Icon Library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
   <style type="text/css">
@@ -145,7 +140,7 @@ body {
           </div>
           <div class="card-body">
             <h5 class="card-title text-center">Register</h5>
-            <form class="form-signin">
+            <form class="form-signin" action="addContacts.php" method="POST" id="fileForm" role="form" enctype="multipart/form-data">
               <div class="form-label-group">
                 <input type="text" id="inputFirstname" class="form-control" placeholder="Firstname" required autofocus>
                 <label for="inputFirstname">Firstname</label>
@@ -171,14 +166,8 @@ body {
                 <label for="inputPhone">Phone no.</label>
               </div>
               <div class="form-group">
-              	<select id="select_language" class="custom-select" data-placeholder="Map To Customer">
-              		<option value="0">Select</option>
-              		<option value="Ben">Ben</option>
-              		<option value="Ten">Ten</option>
-              		<option value="Arab">Arab</option>
-              		<option value="Armen">Armen</option>
-              		<option value="Basq">Basq</option>
-              		<option value="Benli">Benli</option>
+              	<select id="select_Map" class="custom-select" data-placeholder="Map To Customer">
+              		
               	</select>
               </div>
               <hr>
@@ -195,5 +184,49 @@ body {
       </div>
     </div>
   </div>
+  
+  <script>
+	
+        function Ajax_Map() {
+            var d = JSON.stringify({ "var": 0 }); 
+            $(document).ready(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "listContacts.php",
+                    data: d,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+           
+                        var myObj = JSON.parse(JSON.stringify(response));
+                        ParseJSON_map(myObj);
+                   
+                    },
+                    
+                    failure: function (response) {
+                        alert(response.d);
+                    }
+                    
+                    
+                });
+            });
+        }
+
+        function  ParseJSON_map (myObj) {
+        var select_raw = document.getElementById('select_Map');
+
+            for (var i = 0; i < myObj.length; i++)
+            {
+                var option_map = document.createElement('option');
+                option_map.value= myObj[i].id;
+                option_map.innerHTML= myObj[i].firstName;
+                select_raw.appendChild(option_map);
+
+            }
+        
+            
+        }
+        
+</script>
 </body>
 </html>
